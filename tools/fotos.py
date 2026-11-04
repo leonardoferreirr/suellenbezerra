@@ -20,16 +20,18 @@ FOTOS = [
     ("sb-114.jpg", "cuidado", (0, .02, 1, .77), (800, 1200)),       # mão no queixo (a pose do post dela)
     ("sb-120.jpg", "sobre", (0, 0, 1, .75), (800, 1200)),           # jaleco, olhar direto
     ("sb-122.jpg", "formatura", (.03, 0, .97, 1), (600, 900)),      # formatura, nome no telão
-    ("sb-047.jpg", "frase", (0, .24, 1, 1), (800, 1200, 1600)),     # de branco com café, sem o texto do post
+    # de branco com café: recortada abaixo do texto do post e com o topo refeito no Firefly (espaço acima da cabeça)
+    ("frase-expandida.png", "frase", None, (800, 1200, 1600)),
     ("sb-125.jpg", "final", (0, 0, 1, .82), (800, 1200, 1600)),     # jaleco e planta
     # seção 2 no celular continua com o retrato; no computador, a versão com o fundo estendido (Firefly)
     ("cuidado-expandida.png", "cuidado-larga", (0, .014, 1, 1), (1200, 1800, 2400)),
-    # slideshow do "Prazer, sou a Suéllen" (4:5)
+    # carrossel do "Prazer, sou a Suéllen" (4:5)
     ("sb-118.jpg", "slide-jaleco", ("45", .05), (600, 900)),
     ("sb-060.jpg", "slide-corrida", ("45", .5), (600, 900)),
-    ("sb-perfil.jpg", "slide-perfil", ("45", .3), (600, 900)),
-    ("sb-113.jpg", "slide-represa", ("45", .5), (600, 900)),
-    ("sb-079.jpg", "slide-consultorio", ("45", .3), (600, 900)),
+    # frames dos reels de treino (DcPlichN-DD e DbYW6TxMqOP), recortados longe da legenda queimada no vídeo
+    ("frame-academia-branca.jpg", "slide-academia", (0, 0, 1, .703), (600, 900)),
+    ("frame-academia-rosa.jpg", "slide-treino", (.0556, .229, .9444, .854), (600, 900)),
+    ("sb-corrida-pos.jpg", "slide-pos-corrida", ("45", .1), (600, 900)),   # 2ª foto do post DMyOTw0SLtg
     ("sb-119.jpg", "slide-jardim", ("45", .5), (600, 900)),
 ]
 
@@ -60,18 +62,24 @@ def main():
             im = im.crop((round(caixa[0] * W), round(caixa[1] * H), round(caixa[2] * W), round(caixa[3] * H)))
         salvar(im, nome, larguras)
     # os ícones da aba saem do monograma SB: tools/marca.py
-    # compartilhamento: foto à direita, nome e promessa à esquerda
+    # compartilhamento: a frase é o destaque; a marca entra pequena, na horizontal, no canto (como no cabeçalho)
     og = Image.new("RGB", (1200, 630), (251, 246, 241)); d = ImageDraw.Draw(og)
-    d.ellipse((640, 60, 1240, 660), fill=(237, 213, 203))
-    r = rec.copy(); r.thumbnail((560, 620), Image.LANCZOS)
-    og.paste(r, (1200 - r.width - 20, 630 - r.height), r)
+    d.ellipse((660, 70, 1240, 650), fill=(237, 213, 203))
+    r = rec.copy(); r.thumbnail((540, 600), Image.LANCZOS)
+    og.paste(r, (1200 - r.width - 24, 630 - r.height), r)
+    x0, y0 = 72, 58
     mono = RAIZ / "assets/src/marca/sb-og.png"           # gerado pelo tools/marca.py
     if mono.exists():
-        m = Image.open(mono).convert("RGBA"); m = m.crop(m.getbbox()); m.thumbnail((110, 120), Image.LANCZOS)
-        og.paste(m, (72, 60), m)
-    d.text((70, 196), "Suéllen Bezerra", font=ImageFont.truetype(str(FONTE_M), 58), fill=(59, 38, 34))
-    d.text((72, 274), "Nutricionista · CRN 11028", font=ImageFont.truetype(str(FONTE), 28), fill=(125, 103, 98))
-    d.text((70, 350), "Emagreça sem\ndieta restritiva.", font=ImageFont.truetype(str(FONTE), 52), fill=(163, 90, 71), spacing=10)
+        m = Image.open(mono).convert("RGBA"); m = m.crop(m.getbbox()); m.thumbnail((48, 56), Image.LANCZOS)
+        og.paste(m, (x0, y0), m)
+        x_txt = x0 + m.width + 16
+    else:
+        x_txt = x0
+    d.text((x_txt, y0 + 2), "Suéllen Bezerra", font=ImageFont.truetype(str(FONTE_M), 24), fill=(59, 38, 34))
+    d.text((x_txt, y0 + 32), "NUTRICIONISTA · CRN 11028", font=ImageFont.truetype(str(FONTE), 14), fill=(125, 103, 98))
+    fr = ImageFont.truetype(str(FONTE), 86)
+    for i, (linha, cor) in enumerate((("Emagreça", (59, 38, 34)), ("sem dieta", (59, 38, 34)), ("restritiva.", (163, 90, 71)))):
+        d.text((x0 - 4, 178 + i * 102), linha, font=fr, fill=cor)
     og.save(RAIZ / "assets/img/og-image.jpg", quality=86)
     print("ok:", sorted(p.name for p in OUT.glob("*.webp")))
 

@@ -41,21 +41,16 @@
   w.addEventListener('resize', medeCab, { passive: true });
   if (d.fonts && d.fonts.ready) d.fonts.ready.then(medeCab);
 
-  /* "Prazer, sou a Suéllen": slideshow infinito, só roda quando está na tela */
-  const caixa = d.querySelector('[data-slides]');
-  if (caixa) {
-    const fotos = [...caixa.querySelectorAll('.slide')], pontos = [...caixa.querySelectorAll('.slides__pontos i')];
-    let k = 0, timer = null, visivel = false;
-    const mostra = i => {
-      fotos[k].classList.remove('on'); pontos[k] && pontos[k].classList.remove('on');
-      k = (i + fotos.length) % fotos.length;
-      fotos[k].classList.add('on'); pontos[k] && pontos[k].classList.add('on');
-    };
-    pontos[0] && pontos[0].classList.add('on');
-    const roda = () => { clearInterval(timer); if (visivel && !d.hidden) timer = setInterval(() => mostra(k + 1), rm ? 6000 : 3800); };
-    if ('IntersectionObserver' in w) new IntersectionObserver(es => { visivel = es[0].isIntersecting; roda(); }, { threshold: .25 }).observe(caixa);
-    else { visivel = true; roda(); }
-    d.addEventListener('visibilitychange', roda);
+  /* "Prazer, sou a Suéllen": carrossel infinito. As fotos carregam todas quando a seção se aproxima
+     (as que estão fora da faixa visível não esperam entrar para baixar) e a trilha só anda quando está na tela. */
+  const gal = d.querySelector('[data-galeria]');
+  if (gal) {
+    const solta = () => gal.querySelectorAll('img[loading="lazy"]').forEach(i => { i.loading = 'eager'; });
+    if ('IntersectionObserver' in w) {
+      const perto = new IntersectionObserver(es => { if (es[0].isIntersecting) { solta(); perto.disconnect(); } }, { rootMargin: '900px 0px' });
+      perto.observe(gal);
+      new IntersectionObserver(es => gal.classList.toggle('roda', es[0].isIntersecting)).observe(gal);
+    } else { solta(); gal.classList.add('roda'); }
   }
 
   /* dúvidas: uma aberta por vez */

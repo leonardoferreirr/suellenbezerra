@@ -17,15 +17,17 @@ CH = os.path.expanduser("~/Library/Caches/ms-playwright/chromium_headless_shell-
 CREME, TERRA = "#FBF6F1", "#A35A47"
 
 
-def icone_svg():
-    """Monograma terracota centralizado num quadrado creme arredondado (lê bem na aba clara e na escura)."""
+def icone_svg(fundo=False):
+    """Monograma terracota centralizado num quadrado.
+    Aba do navegador: fundo transparente. Ícone do iPhone (apple-touch): o iOS pinta transparência de preto,
+    então ali o monograma vai num quadrado creme."""
     s = (IMG / "sb-monograma.svg").read_text()
     W, H = [float(v) for v in re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', s).groups()]
     miolo = re.search(r"<g .*</g>", s).group(0)
-    lado = max(W, H) * 1.36
+    lado = max(W, H) * (1.36 if fundo else 1.02)
     tx, ty = (lado - W) / 2, (lado - H) / 2
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {lado:.0f} {lado:.0f}">'
-            f'<rect width="{lado:.0f}" height="{lado:.0f}" rx="{lado * .22:.0f}" fill="{CREME}"/>'
+    rect = f'<rect width="{lado:.0f}" height="{lado:.0f}" fill="{CREME}"/>' if fundo else ""
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {lado:.0f} {lado:.0f}">{rect}'
             f'<g transform="translate({tx:.0f} {ty:.0f})">{miolo}</g></svg>')
 
 
@@ -35,9 +37,9 @@ async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path=CH)
         pg = await b.new_page()
-        for lado, nome in ((64, "favicon.png"), (180, "apple-touch-icon.png")):
+        for lado, nome, svg in ((64, "favicon.png", ic), (180, "apple-touch-icon.png", icone_svg(fundo=True))):
             await pg.set_viewport_size({"width": lado, "height": lado})
-            await pg.set_content(f'<html><body style="margin:0;background:transparent">{ic.replace("<svg ", f"<svg width={lado} height={lado} ", 1)}</body></html>')
+            await pg.set_content(f'<html><body style="margin:0;background:transparent">{svg.replace("<svg ", f"<svg width={lado} height={lado} ", 1)}</body></html>')
             await pg.screenshot(path=str(IMG / nome), omit_background=True)
         mono = (IMG / "sb-monograma.svg").read_text().replace("<svg ", '<svg height="360" ', 1)
         await pg.set_viewport_size({"width": 400, "height": 360})

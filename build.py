@@ -187,21 +187,25 @@ def pagina(titulo, desc, corpo, rota="/", preload="", robots=None, casca=True, e
 </html>'''
 
 
-SLIDES = [  # a primeira abre o slideshow; as outras entram sozinhas, em ciclo
+GALERIA = [  # carrossel infinito do "Prazer, sou a Suéllen", nesta ordem
     ("sobre", "Suéllen Bezerra de jaleco branco", (800, 1200)),
     ("formatura", "Formatura de Suéllen Bezerra em Nutrição, com o nome dela no telão", (600, 900)),
     ("slide-jaleco", "Suéllen de jaleco, sorrindo", (600, 900)),
     ("slide-corrida", "Suéllen correndo numa estrada arborizada", (600, 900)),
-    ("slide-perfil", "Suéllen de jaleco, com a mão no queixo", (600, 900)),
-    ("slide-represa", "Suéllen num passeio ao ar livre", (600, 900)),
-    ("slide-consultorio", "Suéllen sentada no consultório", (600, 900)),
+    ("slide-academia", "Suéllen treinando com halteres na academia", (600, 900)),
+    ("slide-treino", "Suéllen fazendo remada com halteres na academia", (600, 900)),
+    ("slide-pos-corrida", "Suéllen de boné e óculos escuros depois de uma corrida", (600, 900)),
     ("slide-jardim", "Suéllen num jardim", (600, 900)),
 ]
 
 
-def slides():
-    return "".join(f'<figure class="slide{" on" if i == 0 else ""}">{foto(n, a, "(max-width:760px) 88vw, 40vw", lazy=True, larguras=l)}</figure>'
-                   for i, (n, a, l) in enumerate(SLIDES))
+def galeria():
+    """Duas voltas iguais na trilha: a segunda é cópia (escondida dos leitores de tela) para o loop emendar em -50%."""
+    def volta(copia):
+        attr = ' aria-hidden="true"' if copia else ""
+        return "".join(f'<figure{attr}>{foto(n, "" if copia else a, "(max-width:760px) 62vw, 21rem", lazy=True, larguras=l)}</figure>'
+                       for n, a, l in GALERIA)
+    return volta(False) + volta(True)
 
 
 # ------------------------------------------------------------------ páginas
@@ -244,7 +248,7 @@ def home():
   <div class="fim rv">{cta("Agendar minha consulta", "pilares")}</div>
 </div></section>
 
-<section class="frase" data-fundo><div class="frase__bg">{foto("frase", "", "100vw", larguras=(800, 1200))}</div><div class="wrap"><div class="frase__txt rv">
+<section class="frase" data-fundo><div class="frase__bg">{foto("frase", "", "100vw", larguras=(800, 1200, 1600))}</div><div class="wrap"><div class="frase__txt rv">
   <p class="frase__grande">{e(FRASE_DIETA[0])}<br>{e(FRASE_DIETA[1])}</p>
   <div class="ctas">{cta("Começar agora", "frase", "claro")}</div>
 </div></div></section>
@@ -256,10 +260,7 @@ def home():
 </div></section>
 
 <section class="sec sobre" id="sobre"><div class="wrap sobre__in">
-  <div class="slides rv" data-slides aria-roledescription="carrossel" aria-label="Fotos da Suéllen">
-    {slides()}
-    <div class="slides__pontos" aria-hidden="true">{"".join("<i></i>" for _ in SLIDES)}</div>
-  </div>
+  <div class="galeria rv" data-galeria role="region" aria-label="Fotos da Suéllen"><div class="galeria__trilho">{galeria()}</div></div>
   <div class="sobre__txt rv" data-d="1">
     <h2>Prazer, sou a Suéllen.</h2>
     {"".join(f"<p>{e(p)}</p>" for p in SOBRE)}
