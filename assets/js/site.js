@@ -30,6 +30,34 @@
   w.addEventListener('scroll', pedir, { passive: true });
   quadro();
 
+  /* "Como eu trabalho": os cartões param logo abaixo do título fixo */
+  const cab = d.querySelector('.pilares-sec .cab'), pilares = d.querySelector('.pilares');
+  const medeCab = () => {
+    if (!cab || !pilares) return;
+    const topoCab = parseFloat(getComputedStyle(cab).top) || 0;
+    pilares.style.setProperty('--cab-h', `${Math.round(topoCab + cab.offsetHeight + 14)}px`);
+  };
+  medeCab();
+  w.addEventListener('resize', medeCab, { passive: true });
+  if (d.fonts && d.fonts.ready) d.fonts.ready.then(medeCab);
+
+  /* "Prazer, sou a Suéllen": slideshow infinito, só roda quando está na tela */
+  const caixa = d.querySelector('[data-slides]');
+  if (caixa) {
+    const fotos = [...caixa.querySelectorAll('.slide')], pontos = [...caixa.querySelectorAll('.slides__pontos i')];
+    let k = 0, timer = null, visivel = false;
+    const mostra = i => {
+      fotos[k].classList.remove('on'); pontos[k] && pontos[k].classList.remove('on');
+      k = (i + fotos.length) % fotos.length;
+      fotos[k].classList.add('on'); pontos[k] && pontos[k].classList.add('on');
+    };
+    pontos[0] && pontos[0].classList.add('on');
+    const roda = () => { clearInterval(timer); if (visivel && !d.hidden) timer = setInterval(() => mostra(k + 1), rm ? 6000 : 3800); };
+    if ('IntersectionObserver' in w) new IntersectionObserver(es => { visivel = es[0].isIntersecting; roda(); }, { threshold: .25 }).observe(caixa);
+    else { visivel = true; roda(); }
+    d.addEventListener('visibilitychange', roda);
+  }
+
   /* dúvidas: uma aberta por vez */
   const itens = [...d.querySelectorAll('.faq__item')];
   itens.forEach(it => it.addEventListener('toggle', () => { if (it.open) itens.forEach(o => { if (o !== it) o.open = false; }); }));

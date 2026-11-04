@@ -22,15 +22,24 @@ FOTOS = [
     ("sb-122.jpg", "formatura", (.03, 0, .97, 1), (600, 900)),      # formatura, nome no telão
     ("sb-047.jpg", "frase", (0, .24, 1, 1), (800, 1200, 1600)),     # de branco com café, sem o texto do post
     ("sb-125.jpg", "final", (0, 0, 1, .82), (800, 1200, 1600)),     # jaleco e planta
+    # seção 2 no celular continua com o retrato; no computador, a versão com o fundo estendido (Firefly)
+    ("cuidado-expandida.png", "cuidado-larga", (0, .014, 1, 1), (1200, 1800, 2400)),
+    # slideshow do "Prazer, sou a Suéllen" (4:5)
+    ("sb-118.jpg", "slide-jaleco", ("45", .05), (600, 900)),
+    ("sb-060.jpg", "slide-corrida", ("45", .5), (600, 900)),
+    ("sb-perfil.jpg", "slide-perfil", ("45", .3), (600, 900)),
+    ("sb-113.jpg", "slide-represa", ("45", .5), (600, 900)),
+    ("sb-079.jpg", "slide-consultorio", ("45", .3), (600, 900)),
+    ("sb-119.jpg", "slide-jardim", ("45", .5), (600, 900)),
 ]
 
 
 def salvar(im, nome, larguras, q=78):
     for w in larguras:
-        if w > im.width:
-            w = im.width
+        alvo = w                              # o nome segue a largura pedida (o img lê o tamanho real)
+        w = min(w, im.width)
         h = round(im.height * w / im.width)
-        im.resize((w, h), Image.LANCZOS).save(OUT / f"{nome}-{w}.webp", "WEBP", quality=q, method=6)
+        im.resize((w, h), Image.LANCZOS).save(OUT / f"{nome}-{alvo}.webp", "WEBP", quality=q, method=6)
 
 
 def main():
@@ -41,7 +50,12 @@ def main():
     salvar(rec, "hero", (700, 1100), q=82)
     for arq, nome, caixa, larguras in FOTOS:
         im = Image.open(SRC / arq).convert("RGB")
-        if caixa:
+        if caixa and caixa[0] == "45":           # 4:5 exato, âncora vertical caixa[1] (0 = topo)
+            W, H = im.size
+            w, h = (W, round(W * 1.25)) if W * 1.25 <= H else (round(H * .8), H)
+            x0, y0 = (W - w) // 2, round((H - h) * caixa[1])
+            im = im.crop((x0, y0, x0 + w, y0 + h))
+        elif caixa:
             W, H = im.size
             im = im.crop((round(caixa[0] * W), round(caixa[1] * H), round(caixa[2] * W), round(caixa[3] * H)))
         salvar(im, nome, larguras)

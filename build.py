@@ -38,7 +38,7 @@ def ic(nome):
 
 
 # ------------------------------------------------------------------ copy (bio + post fixado de 29/10)
-HERO_H1 = "Emagrecer sem dieta restritiva."
+HERO_H1 = "Emagreça sem dieta restritiva."
 HERO_P = ("Eu direciono mulheres a emagrecer entendendo o seu comportamento alimentar, com um plano que respeita "
           "seus gostos, a sua rotina e a sua realidade financeira.")
 FAIXA = ["Sem dieta restritiva", "Sem culpa ao comer", "Comida de verdade", "Do jeito da sua rotina",
@@ -55,7 +55,7 @@ PILARES = [
     ("moeda", "Considero sua realidade financeira", "Busco sempre as melhores opções, com equilíbrio entre qualidade, custo e praticidade."),
     ("grafico", "Acompanhamento e evolução", "Juntas, vamos construindo hábitos sustentáveis, com mais saúde, autoestima e bem-estar."),
 ]
-FRASE_DIETA = "Você não precisa viver em função de uma dieta. Precisa aprender a cuidar de si de uma forma que faça sentido para a sua vida."
+FRASE_DIETA = ("Você não precisa viver em função de uma dieta.", "Precisa aprender a cuidar de si de uma forma que faça sentido para a sua vida.")
 PARA_QUEM = [
     "Já começou várias dietas e não conseguiu manter nenhuma.",
     "Vive no efeito sanfona: emagrece, desanima e volta tudo.",
@@ -187,6 +187,23 @@ def pagina(titulo, desc, corpo, rota="/", preload="", robots=None, casca=True, e
 </html>'''
 
 
+SLIDES = [  # a primeira abre o slideshow; as outras entram sozinhas, em ciclo
+    ("sobre", "Suéllen Bezerra de jaleco branco", (800, 1200)),
+    ("formatura", "Formatura de Suéllen Bezerra em Nutrição, com o nome dela no telão", (600, 900)),
+    ("slide-jaleco", "Suéllen de jaleco, sorrindo", (600, 900)),
+    ("slide-corrida", "Suéllen correndo numa estrada arborizada", (600, 900)),
+    ("slide-perfil", "Suéllen de jaleco, com a mão no queixo", (600, 900)),
+    ("slide-represa", "Suéllen num passeio ao ar livre", (600, 900)),
+    ("slide-consultorio", "Suéllen sentada no consultório", (600, 900)),
+    ("slide-jardim", "Suéllen num jardim", (600, 900)),
+]
+
+
+def slides():
+    return "".join(f'<figure class="slide{" on" if i == 0 else ""}">{foto(n, a, "(max-width:760px) 88vw, 40vw", lazy=True, larguras=l)}</figure>'
+                   for i, (n, a, l) in enumerate(SLIDES))
+
+
 # ------------------------------------------------------------------ páginas
 def home():
     faixa = "".join(f"<span>{e(t)}</span><i></i>" for t in FAIXA)
@@ -211,9 +228,10 @@ def home():
 </section>
 <div class="faixa" aria-hidden="true"><div class="faixa__t">{faixa * 3}</div></div>
 
-<section class="sec cuidado"><div class="wrap cuidado__in">
-  <div class="cuidado__foto rv">{foto("cuidado", "Suéllen Bezerra no consultório, de jaleco, com a mão no queixo", "(max-width:760px) 88vw, 36vw")}</div>
-  <div class="cuidado__txt rv" data-d="1">
+<section class="cuidado">
+  <div class="cuidado__bg"><picture><source media="(max-width:760px)" srcset="/assets/img/fotos/cuidado-800.webp 800w, /assets/img/fotos/cuidado-1200.webp 1200w" sizes="100vw">{foto("cuidado-larga", "Suéllen Bezerra no consultório, de jaleco, com a mão no queixo", "100vw", larguras=(1200, 1800, 2400))}</picture></div>
+  <div class="wrap cuidado__in">
+  <div class="cuidado__txt rv">
     <h2>Mais do que uma dieta, é um cuidado individualizado.</h2>
     {"".join(f"<p>{e(p)}</p>" for p in CUIDADO)}
     <div class="ctas">{cta("Quero um plano do meu jeito", "cuidado")}</div>
@@ -227,7 +245,7 @@ def home():
 </div></section>
 
 <section class="frase" data-fundo><div class="frase__bg">{foto("frase", "", "100vw", larguras=(800, 1200))}</div><div class="wrap"><div class="frase__txt rv">
-  <p class="frase__grande">{e(FRASE_DIETA)}</p>
+  <p class="frase__grande">{e(FRASE_DIETA[0])}<br>{e(FRASE_DIETA[1])}</p>
   <div class="ctas">{cta("Começar agora", "frase", "claro")}</div>
 </div></div></section>
 
@@ -238,9 +256,9 @@ def home():
 </div></section>
 
 <section class="sec sobre" id="sobre"><div class="wrap sobre__in">
-  <div class="sobre__fotos">
-    <figure class="sobre__f1 rv">{foto("sobre", "Suéllen Bezerra de jaleco branco, sorrindo", "(max-width:760px) 70vw, 30vw")}</figure>
-    <figure class="sobre__f2 rv" data-d="1">{foto("formatura", "Formatura de Suéllen Bezerra em Nutrição, com o nome dela no telão", "(max-width:760px) 46vw, 18vw", larguras=(600, 900))}</figure>
+  <div class="slides rv" data-slides aria-roledescription="carrossel" aria-label="Fotos da Suéllen">
+    {slides()}
+    <div class="slides__pontos" aria-hidden="true">{"".join("<i></i>" for _ in SLIDES)}</div>
   </div>
   <div class="sobre__txt rv" data-d="1">
     <h2>Prazer, sou a Suéllen.</h2>
@@ -258,7 +276,7 @@ def home():
 <section class="final" data-fundo><div class="final__bg">{foto("final", "", "100vw", larguras=(800, 1200))}</div><div class="wrap"><div class="final__txt rv">
   <h2>Seu objetivo é o meu propósito.</h2>
   <p>Mais do que prescrever dietas, quero ajudar você a construir resultados que durem.</p>
-  <div class="ctas">{cta("Agendar minha consulta pelo WhatsApp", "final", "claro")}</div>
+  <div class="ctas">{cta("Agendar minha consulta", "final", "claro")}</div>
 </div></div></section>
 
 <section class="sec faq-sec" id="duvidas"><div class="wrap faq">
