@@ -146,12 +146,12 @@ def schema():
 def pagina(titulo, desc, corpo, rota="/", preload="", robots=None, casca=True, extra=""):
     robots = robots or ("index,follow,max-image-preview:large" if INDEXAR else "noindex,nofollow")
     topo = f'''<header class="top"><div class="wrap top__in">
-  <a class="marca" href="/" aria-label="Suéllen Bezerra, início"><b>Suéllen Bezerra</b><span>Nutricionista</span></a>
+  <a class="marca" href="/" aria-label="Suéllen Bezerra, nutricionista, início"><img class="marca__sb" src="/assets/img/sb-monograma.svg" alt="" width="40" height="46"><span class="marca__txt"><b>Suéllen Bezerra</b><span>Nutricionista</span></span></a>
   <nav class="nav" aria-label="Principal"><a href="/#como">Como eu trabalho</a><a href="/#sobre">Quem sou</a><a href="/#passos">Como funciona</a><a href="/#duvidas">Dúvidas</a></nav>
   {cta("Agendar consulta", "topo")}
 </div></header>''' if casca else ""
     rodape = f'''<footer class="rod"><div class="wrap rod__in">
-  <div class="rod__marca"><b>Suéllen Bezerra</b><span>Nutricionista · {CRN}</span><p>Emagrecimento feminino sem dieta restritiva.</p></div>
+  <div class="rod__marca"><img class="rod__sb" src="/assets/img/sb-monograma-claro.svg" alt="" width="48" height="56" loading="lazy"><b>Suéllen Bezerra</b><span>Nutricionista · {CRN}</span><p>Emagrecimento feminino sem dieta restritiva.</p></div>
   <div class="rod__col"><a href="/obrigado?c=rodape">{ZAP} {TEL_VER}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">{IG} @suellenbezerranutricionista</a><a href="/privacidade">Política de privacidade</a></div>
 </div><p class="rod__fim wrap">© {date.today().year} Suéllen Bezerra, nutricionista. {CRN}.</p></footer>
 <a class="zap" href="/obrigado?c=flutuante" aria-label="Agendar consulta pelo WhatsApp">{ZAP}<span>Agendar consulta</span></a>''' if casca else ""
@@ -168,7 +168,7 @@ def pagina(titulo, desc, corpo, rota="/", preload="", robots=None, casca=True, e
 <meta property="og:type" content="website"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="Suéllen Bezerra, nutricionista">
 <meta property="og:title" content="{e(titulo)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{DOMINIO}{rota}">
 <meta property="og:image" content="{DOMINIO}/assets/img/og-image.jpg"><meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/assets/img/favicon.png" type="image/png"><link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/img/favicon.png" type="image/png" sizes="64x64"><link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/poppins-300.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/poppins-500.woff2" as="font" type="font/woff2" crossorigin>
 {preload}
@@ -305,6 +305,7 @@ def privacidade():
 
 def obrigado():
     corpo = f'''<section class="obrigado"><div>
+  <img class="obrigado__sb" src="/assets/img/sb-monograma.svg" alt="" width="62" height="72">
   <p class="obrigado__nome">Suéllen Bezerra</p>
   <h1>Abrindo o WhatsApp.</h1>
   <p>Em instantes você fala comigo para agendar a sua consulta.</p>

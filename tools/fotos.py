@@ -59,20 +59,19 @@ def main():
             W, H = im.size
             im = im.crop((round(caixa[0] * W), round(caixa[1] * H), round(caixa[2] * W), round(caixa[3] * H)))
         salvar(im, nome, larguras)
-    # ícones: iniciais em terracota sobre creme
-    for lado, arq in ((64, "favicon.png"), (180, "apple-touch-icon.png")):
-        ic = Image.new("RGB", (lado, lado), (163, 90, 71)); d = ImageDraw.Draw(ic)
-        f = ImageFont.truetype(str(FONTE_M), round(lado * .42))
-        d.text((lado / 2, lado / 2), "SB", font=f, fill=(251, 246, 241), anchor="mm")
-        ic.save(RAIZ / "assets/img" / arq)
+    # os ícones da aba saem do monograma SB: tools/marca.py
     # compartilhamento: foto à direita, nome e promessa à esquerda
     og = Image.new("RGB", (1200, 630), (251, 246, 241)); d = ImageDraw.Draw(og)
     d.ellipse((640, 60, 1240, 660), fill=(237, 213, 203))
     r = rec.copy(); r.thumbnail((560, 620), Image.LANCZOS)
     og.paste(r, (1200 - r.width - 20, 630 - r.height), r)
-    d.text((70, 170), "Suéllen Bezerra", font=ImageFont.truetype(str(FONTE_M), 58), fill=(59, 38, 34))
-    d.text((72, 250), "Nutricionista · CRN 11028", font=ImageFont.truetype(str(FONTE), 28), fill=(125, 103, 98))
-    d.text((70, 330), "Emagrecer sem\ndieta restritiva.", font=ImageFont.truetype(str(FONTE), 52), fill=(163, 90, 71), spacing=10)
+    mono = RAIZ / "assets/src/marca/sb-og.png"           # gerado pelo tools/marca.py
+    if mono.exists():
+        m = Image.open(mono).convert("RGBA"); m = m.crop(m.getbbox()); m.thumbnail((110, 120), Image.LANCZOS)
+        og.paste(m, (72, 60), m)
+    d.text((70, 196), "Suéllen Bezerra", font=ImageFont.truetype(str(FONTE_M), 58), fill=(59, 38, 34))
+    d.text((72, 274), "Nutricionista · CRN 11028", font=ImageFont.truetype(str(FONTE), 28), fill=(125, 103, 98))
+    d.text((70, 350), "Emagreça sem\ndieta restritiva.", font=ImageFont.truetype(str(FONTE), 52), fill=(163, 90, 71), spacing=10)
     og.save(RAIZ / "assets/img/og-image.jpg", quality=86)
     print("ok:", sorted(p.name for p in OUT.glob("*.webp")))
 

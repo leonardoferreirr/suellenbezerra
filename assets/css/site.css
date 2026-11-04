@@ -45,9 +45,11 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
 .top{position:fixed;inset:0 0 auto 0;z-index:60;transition:background-color .4s var(--ease),box-shadow .4s var(--ease)}
 .top.solid{background:rgba(251,246,241,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--linha)}
 .top__in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;height:5rem}
-.marca{display:flex;flex-direction:column;line-height:1.15}
+.marca{display:flex;align-items:center;gap:.75rem}
+.marca__sb{height:2.75rem;width:auto}
+.marca__txt{display:flex;flex-direction:column;line-height:1.15}
 .marca b{font-weight:500;font-size:1.12rem;letter-spacing:-.01em}
-.marca span{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.marca__txt>span{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 .nav{display:flex;gap:1.6rem;font-size:.9rem;color:var(--muted)}
 .nav a{transition:color .3s}
 .nav a:hover{color:var(--terra)}
@@ -171,6 +173,7 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
 /* rodapé */
 .rod{background:var(--cacau);color:var(--papel);padding-block:clamp(3rem,6vw,4.5rem) 1.6rem}
 .rod__in{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.rod__sb{height:3.4rem;width:auto;margin-bottom:.9rem}
 .rod__marca b{display:block;font-weight:500;font-size:1.3rem}
 .rod__marca span{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-2)}
 .rod__marca p{margin-top:.8rem;color:rgba(251,246,241,.7)}
@@ -196,6 +199,7 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
 .texto h2{font-size:1.4rem;margin:2.2rem 0 .6rem}
 .texto p{color:var(--muted)}
 .obrigado{min-height:100svh;display:grid;place-items:center;text-align:center;padding:2rem}
+.obrigado__sb{height:4.4rem;width:auto;margin:0 auto 1rem}
 .obrigado__nome{font-weight:500;letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;color:var(--muted)}
 .obrigado h1{margin-top:1rem;font-size:clamp(1.8rem,4vw,2.8rem)}
 .obrigado p{margin-top:.8rem;color:var(--muted)}
@@ -222,6 +226,8 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
   .top__in{height:4.4rem}
   .top .btn{display:none}
   .marca b{font-size:1.02rem}
+  .marca__sb{height:2.35rem}
+  .rod__sb{margin-inline:auto}
   /* celular: foto dela em tela cheia no topo, degradê para o creme, título entrando por cima */
   .capa{flex-direction:column;align-items:stretch;min-height:0;background:var(--papel)}
   .capa__fundo i:first-child{width:min(104vw,50svh);left:50%;right:auto;bottom:auto;top:5.2rem;transform:translateX(-50%)}
