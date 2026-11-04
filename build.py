@@ -208,6 +208,24 @@ def galeria():
     return volta(False) + volta(True)
 
 
+def capa_fundo():
+    """Forma orgânica atrás dela (cheia e um contorno fino, girando devagar) e o ramo de folhas em traço,
+    no canto de cima à direita, que se desenha ao abrir a página. Desenhos em tools/organico.py."""
+    from tools.organico import blob, ramo
+    caule, *folhas = ramo()
+    traco = ' pathLength="1"'
+    folhas_svg = "".join(g.replace("<path ", f"<path{traco} ").replace('<g ', f'<g style="--d:{.5 + i * .16:.2f}s" ', 1)
+                         for i, g in enumerate(folhas))
+    return (
+        '<div class="capa__fundo" aria-hidden="true">'
+        '<svg class="capa__blob" viewBox="-20 -20 240 240"><defs><radialGradient id="sb-blob" cx="40%" cy="34%" r="72%">'
+        '<stop offset="0" stop-color="#EDD5CB"/><stop offset=".8" stop-color="#DDB3A4"/></radialGradient></defs>'
+        f'<path d="{blob()}" fill="url(#sb-blob)"/></svg>'
+        f'<svg class="capa__linha" viewBox="-20 -20 240 240"><path d="{blob(amp=((3, .06, 2.2), (2, .06, .3), (4, .03, 1.1)))}"/></svg>'
+        f'<svg class="capa__ramo" viewBox="-30 -30 260 480"><path{traco} style="--d:0s" d="{caule}"/>{folhas_svg}</svg>'
+        '</div>')
+
+
 # ------------------------------------------------------------------ páginas
 def home():
     faixa = "".join(f"<span>{e(t)}</span><i></i>" for t in FAIXA)
@@ -219,7 +237,7 @@ def home():
     faq = "".join(f'<details class="faq__item"><summary>{e(p)}<i aria-hidden="true"></i></summary><p>{e(r)}</p></details>' for p, r in FAQ)
     corpo = f'''
 <section class="capa" id="inicio">
-  <div class="capa__fundo" aria-hidden="true"><i></i><i></i></div>
+  {capa_fundo()}
   <div class="capa__foto" data-paralaxe>{foto("hero", "Suéllen Bezerra, nutricionista, de jaleco branco e óculos, sorrindo", "(max-width:760px) 100vw, 46vw", lazy=False, larguras=(700, 1100))}</div>
   <div class="wrap capa__in">
     <div class="capa__txt">

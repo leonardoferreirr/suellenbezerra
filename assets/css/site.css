@@ -57,10 +57,20 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
 
 /* capa */
 .capa{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,var(--papel) 0%,var(--papel-2) 100%)}
-.capa__fundo{position:absolute;inset:0;z-index:-2;pointer-events:none}
-.capa__fundo i{position:absolute;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--rose) 0%,var(--rose-2) 70%)}
-.capa__fundo i:first-child{width:min(48vw,44rem);aspect-ratio:1;right:calc(var(--gutter) * .5);bottom:-14%;}
-.capa__fundo i:last-child{width:clamp(5rem,9vw,8rem);aspect-ratio:1;right:44%;top:20%;background:var(--rose);opacity:.7}
+.capa__fundo{position:absolute;inset:0;z-index:-2;pointer-events:none;--borda:max(var(--gutter),calc((100vw - var(--maxw)) / 2 + var(--gutter)))}
+/* forma orgânica atrás dela: a cheia e um contorno fino girando devagar em sentidos opostos.
+   Presas à mesma borda da foto (--borda), para não fugirem dela em tela larga. */
+.capa__blob,.capa__linha{position:absolute;width:min(55vw,50rem);aspect-ratio:1;right:max(0px,calc(var(--borda) - 5rem));bottom:-19%;overflow:visible}
+.capa__blob{animation:gira-blob 90s linear infinite}
+.capa__linha{fill:none;stroke:var(--rose-3);stroke-width:1.1;opacity:.8;animation:gira-blob 120s linear infinite reverse}
+.capa__linha path,.capa__ramo path{vector-effect:non-scaling-stroke}
+@keyframes gira-blob{to{transform:rotate(360deg)}}
+/* ramo de folhas em traço no canto de cima à direita: se desenha ao abrir e balança de leve */
+.capa__ramo{position:absolute;top:6.2rem;right:max(.6rem,calc(var(--borda) - 8.5rem));width:clamp(7.5rem,11.5vw,12rem);height:auto;overflow:visible;
+  fill:none;stroke:var(--rose-3);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transform-origin:62% 100%;animation:balanca 9s ease-in-out infinite alternate}
+.capa__ramo path{stroke-dasharray:1;stroke-dashoffset:1;animation:desenha 1.8s var(--ease) var(--d,0s) forwards}
+@keyframes desenha{to{stroke-dashoffset:0}}
+@keyframes balanca{from{transform:rotate(-2.5deg)}to{transform:rotate(2deg)}}
 .capa__foto{position:absolute;right:max(var(--gutter),calc((100vw - var(--maxw)) / 2 + var(--gutter)));bottom:0;z-index:-1}
 .capa__foto img{height:min(calc(100svh - 6.5rem),54rem);width:auto;max-width:46vw;object-fit:contain;object-position:bottom;filter:drop-shadow(0 30px 40px rgba(59,38,34,.18));-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16%);mask-image:linear-gradient(90deg,transparent 0,#000 16%)}
 .capa__in{padding-block:7rem 4rem}
@@ -221,6 +231,11 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
 @media (max-width:1000px){
   .nav{display:none}
 }
+/* tablet em pé: o texto fica na metade esquerda e os botões descem um embaixo do outro, sem passar por baixo da foto */
+@media (min-width:761px) and (max-width:1000px){
+  .capa__txt{max-width:min(34rem,50vw)}
+  .capa__blob,.capa__linha{width:64vw;bottom:-5%}
+}
 @media (max-width:860px){
   .cuidado__in,.sobre__in,.passos-in,.faq{grid-template-columns:1fr}
   .passos-cab,.faq__cab{position:relative;top:0;align-items:center;text-align:center}
@@ -234,8 +249,8 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
   .rod__sb{margin-inline:auto}
   /* celular: foto dela em tela cheia no topo, degradê para o creme, título entrando por cima */
   .capa{flex-direction:column;align-items:stretch;min-height:0;background:var(--papel)}
-  .capa__fundo i:first-child{width:min(104vw,50svh);left:50%;right:auto;bottom:auto;top:5.2rem;transform:translateX(-50%)}
-  .capa__fundo i:last-child{display:none}
+  .capa__blob,.capa__linha{width:min(104vw,50svh);left:calc(50% - min(52vw,25svh));right:auto;bottom:auto;top:5.2rem}
+  .capa__ramo{top:5rem;right:.2rem;width:4.6rem;stroke-width:1.2}
   .capa__foto{position:relative;right:auto;bottom:auto;width:100%;margin:4.4rem auto 0;display:flex;justify-content:center}
   .capa__foto img{height:min(54svh,118vw);max-width:100%}
   .capa__foto::after{content:"";position:absolute;inset:auto 0 0 0;height:32%;background:linear-gradient(0deg,var(--papel) 8%,rgba(251,246,241,0))}
@@ -270,7 +285,7 @@ h3{font-weight:500;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}
 }
 @media (max-width:760px) and (max-height:720px){
   .capa__foto img{height:46svh}
-  .capa__fundo i:first-child{width:44svh}
+  .capa__blob,.capa__linha{width:44svh;left:calc(50% - 22svh)}
   .capa__txt>p:not(.capa__crn){margin-top:1rem}
   .capa .ctas{margin-top:1.4rem}
 }
