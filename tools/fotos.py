@@ -5,7 +5,7 @@
 
 Cada foto: (arquivo, nome no site, recorte (x0, y0, x1, y1) em fração ou None, larguras).
 A capa usa o recorte sem fundo (hero-recorte.png, Vision da Apple via lift.swift).
-Gera também favicon, apple-touch-icon e og-image.
+Gera também a og-image (os ícones saem do tools/marca.py).
 """
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
@@ -21,7 +21,7 @@ FOTOS = [
     ("sb-120.jpg", "sobre", (0, 0, 1, .75), (800, 1200)),           # jaleco, olhar direto
     ("sb-122.jpg", "formatura", (.03, 0, .97, 1), (600, 900)),      # formatura, nome no telão
     # de branco com café: recortada abaixo do texto do post e com o topo refeito no Firefly (espaço acima da cabeça)
-    ("frase-expandida.png", "frase", None, (800, 1200, 1600)),
+    ("frase-expandida.png", "frase-v2", None, (800, 1200, 1600)),
     ("sb-125.jpg", "final", (0, 0, 1, .82), (800, 1200, 1600)),     # jaleco e planta
     # seção 2 no celular continua com o retrato; no computador, a versão com o fundo estendido (Firefly)
     ("cuidado-expandida.png", "cuidado-larga", (0, .014, 1, 1), (1200, 1800, 2400)),
@@ -80,7 +80,7 @@ def main():
     fr = ImageFont.truetype(str(FONTE), 86)
     for i, (linha, cor) in enumerate((("Emagreça", (59, 38, 34)), ("sem dieta", (59, 38, 34)), ("restritiva.", (163, 90, 71)))):
         d.text((x0 - 4, 178 + i * 102), linha, font=fr, fill=cor)
-    og.save(RAIZ / "assets/img/og-image.jpg", quality=86)
+    og.save(RAIZ / "assets/img/og-image-v2.jpg", quality=86)
     print("ok:", sorted(p.name for p in OUT.glob("*.webp")))
 
 

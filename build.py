@@ -134,10 +134,10 @@ def schema():
          "description": "Nutricionista clínica com foco em emagrecimento feminino sem dieta restritiva.",
          "alumniOf": {"@type": "CollegeOrUniversity", "name": "UniRitter, Centro Universitário Ritter dos Reis"},
          "hasCredential": {"@type": "EducationalOccupationalCredential", "credentialCategory": "Registro profissional", "name": CRN},
-         "image": f"{DOMINIO}/assets/img/og-image.jpg", "sameAs": [INSTAGRAM], "url": f"{DOMINIO}/"},
+         "image": f"{DOMINIO}/assets/img/og-image-v2.jpg", "sameAs": [INSTAGRAM], "url": f"{DOMINIO}/"},
         {"@type": "MedicalBusiness", "@id": f"{DOMINIO}/#consultorio", "name": "Nutricionista Suéllen Bezerra",
          "medicalSpecialty": "Nutrition", "founder": {"@id": f"{DOMINIO}/#suellen"}, "telephone": TEL_VER,
-         "url": f"{DOMINIO}/", "image": f"{DOMINIO}/assets/img/og-image.jpg", "sameAs": [INSTAGRAM], "areaServed": "BR",
+         "url": f"{DOMINIO}/", "image": f"{DOMINIO}/assets/img/og-image-v2.jpg", "sameAs": [INSTAGRAM], "areaServed": "BR",
          "description": "Atendimento nutricional individualizado para mulheres que querem emagrecer sem dieta restritiva."},
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": p, "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in FAQ]},
     ]})
@@ -167,8 +167,8 @@ def pagina(titulo, desc, corpo, rota="/", preload="", robots=None, casca=True, e
 <meta name="theme-color" content="#FBF6F1">
 <meta property="og:type" content="website"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="Suéllen Bezerra, nutricionista">
 <meta property="og:title" content="{e(titulo)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{DOMINIO}{rota}">
-<meta property="og:image" content="{DOMINIO}/assets/img/og-image.jpg"><meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/img/favicon.png" type="image/png" sizes="64x64"><link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<meta property="og:image" content="{DOMINIO}/assets/img/og-image-v2.jpg"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/img/favicon-v2.svg" type="image/svg+xml"><link rel="icon" href="/assets/img/favicon-v2.png" type="image/png" sizes="64x64"><link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/poppins-300.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/poppins-500.woff2" as="font" type="font/woff2" crossorigin>
 {preload}
@@ -248,7 +248,7 @@ def home():
   <div class="fim rv">{cta("Agendar minha consulta", "pilares")}</div>
 </div></section>
 
-<section class="frase" data-fundo><div class="frase__bg">{foto("frase", "", "100vw", larguras=(800, 1200, 1600))}</div><div class="wrap"><div class="frase__txt rv">
+<section class="frase" data-fundo><div class="frase__bg">{foto("frase-v2", "", "100vw", larguras=(800, 1200, 1600))}</div><div class="wrap"><div class="frase__txt rv">
   <p class="frase__grande">{e(FRASE_DIETA[0])}<br>{e(FRASE_DIETA[1])}</p>
   <div class="ctas">{cta("Começar agora", "frase", "claro")}</div>
 </div></div></section>

@@ -4,7 +4,7 @@
     python3 tools/marca.py
 
 O monograma veio do ChatGPT (opção 1 de 4, em assets/src/marca/) e foi vetorizado com potrace.
-Gera favicon.svg, favicon.png (64), apple-touch-icon.png (180) e assets/src/marca/sb-og.png
+Gera favicon-v2.svg, favicon-v2.png (64), apple-touch-icon.png (180) e assets/src/marca/sb-og.png
 (monograma transparente, usado pela og-image do tools/fotos.py).
 """
 import asyncio, os, re
@@ -33,11 +33,11 @@ def icone_svg(fundo=False):
 
 async def main():
     ic = icone_svg()
-    (IMG / "favicon.svg").write_text(ic)
+    (IMG / "favicon-v2.svg").write_text(ic)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path=CH)
         pg = await b.new_page()
-        for lado, nome, svg in ((64, "favicon.png", ic), (180, "apple-touch-icon.png", icone_svg(fundo=True))):
+        for lado, nome, svg in ((64, "favicon-v2.png", ic), (180, "apple-touch-icon.png", icone_svg(fundo=True))):
             await pg.set_viewport_size({"width": lado, "height": lado})
             await pg.set_content(f'<html><body style="margin:0;background:transparent">{svg.replace("<svg ", f"<svg width={lado} height={lado} ", 1)}</body></html>')
             await pg.screenshot(path=str(IMG / nome), omit_background=True)
@@ -47,7 +47,7 @@ async def main():
         await pg.screenshot(path=str(RAIZ / "assets/src/marca/sb-og.png"), omit_background=True,
                             clip={"x": 0, "y": 0, "width": 312, "height": 360})
         await b.close()
-    print("ok: favicon.svg, favicon.png, apple-touch-icon.png, sb-og.png")
+    print("ok: favicon-v2.svg, favicon-v2.png, apple-touch-icon.png, sb-og.png")
 
 
 if __name__ == "__main__":
